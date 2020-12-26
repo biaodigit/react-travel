@@ -5,6 +5,16 @@ export default defineConfig({
     type: 'none',
   },
   routes: [
-    { path: '/', component: '@/pages/index' },
+    {
+      path: '/',
+      component: '@/layouts/index',
+      routes: [
+        {
+          path: '/',
+          component: './index',
+          title: 'home'
+        }
+      ]
+    },
   ],
 });
