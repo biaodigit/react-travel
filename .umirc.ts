@@ -11,8 +11,18 @@ export default defineConfig({
       routes: [
         {
           path: '/',
-          component: './index',
-          title: 'home'
+          component: './home/index',
+          title: '首页'
+        },
+        {
+          path: '/order',
+          component: './order/index',
+          title: '订单'
+        },
+        {
+          path: '/user',
+          component: './user/index',
+          title: '我的'
         }
       ]
     },

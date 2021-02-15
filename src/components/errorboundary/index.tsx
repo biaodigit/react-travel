@@ -28,7 +28,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
     render() {
         return (
             <div>
-                {this.state.hasError ? <h1>发生错误</h1> : this.props.children}
+                {this.state.hasError ? <h1 className="error-page">发生错误</h1> : this.props.children}
             </div>
         )
     }
