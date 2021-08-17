@@ -1,64 +1,26 @@
 import { useState, useEffect } from 'react'
-import { Toast } from 'antd-mobile'
+import { Http } from '@/utils'
 
-type Result = {
-    status: number
-    data: any
-    errMsg?: string
-}
-
-function useRequest(config: {
+function useRequest<T>(config: {
     url: string,
     method: string,
     headers?: any,
     body?: any,
     dep?: any[]
 }) {
-    const [result, setResult] = useState()
+    const [result, setResult] = useState<T>()
     const [loading, setLoading] = useState(true)
-    const { url, method, headers, body = {}, dep = [] } = config
-
-    async function Http() {
-        setLoading(true)
-        const defaultHeader = {
-            'Content-type': 'application/json'
-        }
-
-        let params: any;
-        if (method.toUpperCase() === 'GET') {
-            params = undefined
-        } else {
-            params = {
-                headers: {
-                    ...defaultHeader,
-                    ...headers
-                },
-                method,
-                body: JSON.stringify(body)
-            }
-        }
-
-        return new Promise((resolve, reject) => {
-            fetch(`/api${url}`, params).then(res => res.json())
-                .then((res: Result) => {
-                    if (res.status === 200) {
-                        setResult(res.data)
-                        resolve(res.data)
-                    } else {
-                        Toast.fail(res.errMsg)
-                        reject(res.errMsg)
-                    }
-                }).catch(err => {
-                    Toast.fail(err)
-                    reject(err)
-                }).finally(() => {
-                    setLoading(false)
-                })
-        })
-    }
+    const { url, method, headers, body, dep = [] } = config
 
     useEffect(() => {
-        Http()
+        Http({
+            url,
+            method,
+            headers,
+            body,
+            setLoading,
+            setResult
+        })
     }, dep)
 
     return { result, loading }

@@ -13,6 +13,9 @@
       "@/*": ["src/*"],
       "@@/*": ["src/.umi/*"]
     },
+    "lib": [
+      "es5", "es6", "dom", "dom.iterable"
+    ],
     "allowSyntheticDefaultImports": true
   },
   "include": [
