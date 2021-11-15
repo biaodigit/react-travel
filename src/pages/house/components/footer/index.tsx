@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Modal } from '@/components';
 import { TextareaItem, Button, Toast } from 'antd-mobile';
+import { useStoreHook } from 'think-react-store'
 
 type Props = {
 
@@ -9,14 +10,15 @@ type Props = {
 const Footer: React.FC<Props> = (props) => {
     const [show, setShow] = useState(false);
     const [commentsValue, setCommentsValue] = useState('');
+    const { house: { addCommentsAsync } } = useStoreHook()
 
     const handleClick = () => {
         setShow(true)
     };
 
     const handleChange = (value?: string) => {
-        // console.log(value)
-        setCommentsValue(value || '');
+        console.log(value)
+        setCommentsValue(value!);
     };
 
     const handleClose = () => {
@@ -25,7 +27,10 @@ const Footer: React.FC<Props> = (props) => {
 
     const handleSubmit = () => {
         if (commentsValue) {
-
+            addCommentsAsync({
+                comment: commentsValue
+            })
+            handleClose()
         } else {
             Toast.fail('请添加信息')
         }

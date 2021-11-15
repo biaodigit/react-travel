@@ -8,7 +8,7 @@ type Result = {
 
 export default async function Http<T>(config: {
     url: string,
-    method: string,
+    method?: string,
     headers?: any,
     body?: any,
     setLoading?: (status: boolean) => void,

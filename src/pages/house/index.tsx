@@ -4,12 +4,14 @@ import Info from './components/info';
 import Lists from './components/lists';
 import Footer from './components/footer';
 import { useStoreHook } from 'think-react-store';
+import { useLocation } from 'umi'
 import { useObserver } from '@/hooks';
 import { CommonEnum } from '@/enums';
 import './index.less'
 
 const House: React.FC = () => {
-    const { house: { detail, getDetailAsync, getCommentsAsync, comments, showLoading, reloadComments, reloadCommentsNum } } = useStoreHook()
+    const { house: { detail, getDetailAsync, getCommentsAsync, comments, showLoading, reloadComments, reloadCommentsNum, resetData } } = useStoreHook()
+    const { query } = useLocation()
 
     useObserver(`#${CommonEnum.LOADING_ID}`, (entries: IntersectionObserverEntry[]) => {
         if (comments && comments.length && showLoading && entries[0].isIntersecting) {
@@ -17,11 +19,23 @@ const House: React.FC = () => {
         }
     }, [comments, showLoading])
     useEffect(() => {
-        getDetailAsync({})
+        getDetailAsync({
+            id: query?.id
+        })
     }, [])
     useEffect(() => {
-        getCommentsAsync({})
+        getCommentsAsync({
+            id: query?.id
+        })
     }, [reloadCommentsNum])
+
+    useEffect(() => {
+        return () => {
+            resetData({
+                detail: {}
+            })
+        }
+    })
 
     return <div className='house-page'>
         <Banner banner={detail?.banner} />

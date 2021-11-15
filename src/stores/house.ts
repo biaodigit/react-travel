@@ -37,13 +37,22 @@ export default {
                     pageNum: state.page.pageNum + 1
                 }
             }
+        },
+        resetData(state: any, payload: any) {
+            return {
+                ...state,
+                detail: {},
+                comments: [],
+                page: CommonEnum.PAGE,
+                showLoading: true,
+                reloadCommentsNum: 0
+            }
         }
     },
     effects: {
         async getDetailAsync(dispatch: (arg0: { type: string; payload: unknown }) => void, rootState: any, payload: any) {
             const detail = await Http({
                 url: '/house/detail',
-                method: 'post',
                 body: payload
             })
             dispatch({
@@ -55,7 +64,6 @@ export default {
             const { comments, page } = rootState.house
             const lists = await Http({
                 url: '/comments/lists',
-                method: 'post',
                 body: {
                     ...payload,
                     pageSize: page.pageSize,
@@ -70,6 +78,18 @@ export default {
                 type: 'setShowLoading',
                 payload: !!(lists as any[]).length
             })
+        },
+        async addCommentsAsync(dispatch: (arg0: { type: string; payload: unknown }) => void, rootState: any, payload: any) {
+            const result = await Http({
+                url: '/comments/add',
+                body: payload
+            })
+            if (result) {
+                dispatch({
+                    type: 'resetData',
+                    payload: {}
+                })
+            }
         }
     }
 }
